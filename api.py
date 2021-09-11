@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api, abort
 from flask_cors import CORS
 import json
+import db
 
 app = Flask(__name__)
 api = Api(app)
@@ -15,23 +16,32 @@ def does_not_exist(list_id):
 
 class Comp(Resource):
     def get(self, list_id):
-        does_not_exist(list_id)
-        response = op_list[list_id]
-        return response 
-
-    def put(self, list_id):
-        op_list[list_id] = request.json
-        response = {list_id: op_list[list_id]}
+        sql = db.db()
+        # does_not_exist(list_id)
+        response = json.loads(sql.select_list(list_id))
+        print(response)
         return response
 
+    def put(self, list_id):
+        sql = db.db()
+        print(list_id, json.dumps(request.json), "- put print")
+        sql.insert(list_id, json.dumps(request.json))
+        # sql.insert("test", "test")
+        # op_list[list_id] = request.json
+        return 200
+
     def delete(self, list_id):
-        does_not_exist(list_id)
-        del op_list[list_id]
+        sql = db.db()
+        sql.delete(list_id)
+
         return '', 204
 
 class CompList(Resource):
     def get(self):
-        response = {"data": list(op_list.keys())}
+        sql = db.db()
+        sql.create_table()
+        response = {"data": sql.select_complist()}
+        # response = {"data": list(op_list.keys())}
         return response
 
 api.add_resource(CompList, '/api')
