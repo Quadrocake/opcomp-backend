@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_socketio import SocketIO
-from api import socketio
+from main import socketio
 
 @socketio.on('connect')
 def test_connect():
