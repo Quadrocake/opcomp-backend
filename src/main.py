@@ -57,4 +57,4 @@ api.add_resource(CompList, '/api')
 api.add_resource(Comp, '/api/<string:list_id>')
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0', port=5000)
