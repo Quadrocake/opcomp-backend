@@ -1,0 +1,7 @@
+version: "3"
+
+services:
+  anje:
+    image: opcomp:latest
+    ports:
+      - 5000:80
