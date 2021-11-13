@@ -4,7 +4,7 @@ from sqlite3.dbapi2 import Error
 class db:
     def __init__(self):
         try:
-            self.con = sqlite3.connect('comp.db')
+            self.con = sqlite3.connect('/db/comp.db')
             self.cur = self.con.cursor()
         except Error as e:
             print(e)
