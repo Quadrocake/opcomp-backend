@@ -1,9 +1,10 @@
-from flask import Flask, request
+from flask import Flask, request, make_response, jsonify
 from flask_restful import Resource, Api, abort
 from flask_cors import CORS
 from flask_socketio import SocketIO
 import json
 import db
+import requests
 
 app = Flask(__name__)
 api = Api(app)
@@ -53,8 +54,16 @@ class CompList(Resource):
         # response = {"data": list(op_list.keys())}
         return response
 
+class MALProxy(Resource):
+    def get(self):
+        url = request.args.get('url')
+        if 'myanimelist' in url:
+            malReply = requests.get(url, headers={"X-MAL-Client-ID": "6114d00ca681b7701d1e15fe11a4987e"})
+            return malReply.json()
+
 api.add_resource(CompList, '/api')
 api.add_resource(Comp, '/api/<string:list_id>')
+api.add_resource(MALProxy, '/cors')
 
 if __name__ == '__main__':
     socketio.run(app, host='0.0.0.0', port=5000)
